@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { contacts: ctrl } = require("../../controllers");
-const { validation, isValidId, ctrlWrapper } = require("../../middlewares");
+const { validation, isValidId, ctrlWrapper, auth } = require("../../middlewares");
 const { contactSchema, statusContactSchema } = require("../../service/schemas");
 
 const validateMiddleware = validation(contactSchema);
@@ -9,9 +9,9 @@ const validateStatusMiddleware = validation(statusContactSchema);
 
 const router = express.Router();
 
-router.get("/", ctrlWrapper(ctrl.getAllContacts));
+router.get("/", auth, ctrlWrapper(ctrl.getAllContacts));
 router.get("/:contactId", isValidId, ctrlWrapper(ctrl.getContactById));
-router.post("/", validateMiddleware, ctrlWrapper(ctrl.addContact));
+router.post("/", auth, validateMiddleware, ctrlWrapper(ctrl.addContact));
 router.delete("/:contactId", isValidId, ctrlWrapper(ctrl.removeContact));
 router.put(
   "/:contactId",
