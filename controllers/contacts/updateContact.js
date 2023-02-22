@@ -1,5 +1,5 @@
 const createError = require("http-errors");
-const { updateContact } = require("../../service");
+const { Contact } = require("../../service/schemas/contacts");
 
 const update = async (req, res, next) => {
   const { contactId } = req.params;
@@ -8,7 +8,11 @@ const update = async (req, res, next) => {
     return next(createError(400, "Missing field favorite"));
   }
 
-  const updatedContact = await updateContact(contactId, req.body);
+  const updatedContact = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    req.body,
+    { new: true }
+  );
 
   if (!updatedContact) {
     return next(createError(404, "Not found"));
