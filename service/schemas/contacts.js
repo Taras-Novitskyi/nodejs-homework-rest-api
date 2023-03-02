@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
+const {handleMongooseError} = require("../../helpers");
+
 const Schema = mongoose.Schema;
 
 const contact = new Schema(
@@ -27,6 +29,8 @@ const contact = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+contact.post("save", handleMongooseError);
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
