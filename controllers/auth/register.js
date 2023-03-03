@@ -1,5 +1,6 @@
 const { Conflict } = require("http-errors");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 const { User } = require("../../service/schemas");
 
 const register = async (req, res) => {
@@ -11,12 +12,14 @@ const register = async (req, res) => {
   }
   
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  const avatarURL = gravatar.url(email);
 
   const result = await User.create({
     name,
     email,
     password: hashPassword,
     subscription,
+    avatarURL,
     token,
   });
 	
