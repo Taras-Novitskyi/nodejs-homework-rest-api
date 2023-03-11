@@ -9,11 +9,12 @@ const { DB_HOST, PORT = 3001 } = process.env;
 
 describe("Auth login test", function () {
   const connection = mongoose.connect(DB_HOST);
+  let server;
 
   beforeAll(async () => {
     await connection
       .then(() => {
-        app.listen(PORT);
+        server = app.listen(PORT);
       })
       .catch((err) => {
         console.log(`Server not running. Error message: ${err.message}`);
@@ -21,15 +22,14 @@ describe("Auth login test", function () {
       });
   });
 
-  //   afterAll(async () => {
-  //     await connection.close();
-  //     app.exit(1);
-  //   });
+  afterAll(async () => {
+      await server.close();
+    });
 
   test("should return response with token and user object", async () => {
     const response = await request(app)
       .post("/api/users/login")
-      .send({ email: "maxum@gmail.com", password: "123456" });
+      .send({ email: "novitskyitaras@gmail.com", password: "123456" });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.ResponseBody.token).toBeDefined();

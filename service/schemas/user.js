@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
-const {handleMongooseError} = require("../../helpers");
+const { handleMongooseError } = require("../../helpers");
 
 const Schema = mongoose.Schema;
 
@@ -9,7 +9,7 @@ const user = new Schema(
   {
     name: {
       type: String,
-        required: [true, "Set name for user"],
+      // required: [true, "Set name for user"],
     },
     password: {
       type: String,
@@ -27,11 +27,19 @@ const user = new Schema(
     },
     avatarURL: {
       type: String,
-      required: [true, "Avatar is required"],
+      // required: [true, "Avatar is required"],
     },
     token: {
       type: String,
       default: null,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      // required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }
@@ -47,7 +55,6 @@ const userRegisterSchema = Joi.object({
   password: Joi.string().required(),
   subscription: Joi.string(),
   avatarURL: Joi.string(),
-  token: Joi.string(),
 });
 
 const userLoginSchema = Joi.object({
@@ -55,7 +62,6 @@ const userLoginSchema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
   password: Joi.string().required(),
-  token: Joi.string(),
 });
 
 const User = mongoose.model("user", user);
